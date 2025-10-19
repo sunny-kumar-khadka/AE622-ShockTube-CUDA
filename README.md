@@ -118,6 +118,10 @@ pip install -r requirements.txt
 cd cuda
 make run-default
 
+# Generate plots
+cd ../visualize
+python visualize_comparison.py
+```
 
 ### Analytical Solution
 ```bash
