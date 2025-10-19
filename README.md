@@ -118,48 +118,6 @@ pip install -r requirements.txt
 cd cuda
 make run-default
 
-# Generate plots
-cd ../visualize
-python visualize_comparison.py
-```
-
-### Advanced Usage
-
-#### CUDA Simulation Options
-```bash
-cd cuda
-
-# Run with custom parameters
-./shock_tube -n 512 -t 0.3 -o my_solution -steps 31
-
-# Run only on CPU (host)
-./shock_tube --host -n 256 -t 0.2
-
-# Run only on GPU (device)  
-./shock_tube --device -n 256 -t 0.2
-
-# Run unit tests
-./shock_tube --test
-```
-
-#### Available Make Targets
-```bash
-make help              # Show all available targets
-make clean             # Clean build artifacts
-make debug             # Build with debug symbols
-make profile           # Build with profiling support
-make test              # Run unit tests
-make run-lax           # Run Lax-Wendroff simulation
-make run-all           # Run both CPU and GPU simulations
-```
-
-#### Configuration
-Edit `config.yaml` to modify:
-- Grid resolution (`n_grids`)
-- Simulation time (`t_max`)
-- Initial conditions (`left_state`, `right_state`)
-- Physical parameters (`gamma`, `cfl`)
-- Output settings
 
 ### Analytical Solution
 ```bash
