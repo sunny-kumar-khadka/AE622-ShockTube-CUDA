@@ -1,0 +1,107 @@
+# Shock Tube Simulation Configuration
+# ==================================
+
+# Shared Physical/Run Parameters
+parameters:
+  gamma: 1.4                    # Ratio of specific heats
+  dust_fraction: 0.0            # Dust fraction (0-1)
+  n_points: 256                 # Points for analytical reference grid
+  t: 0.2                        # Time for analytical/reference solution
+
+# Simulation Parameters (numerical/CUDA)
+simulation:
+  # Grid parameters
+  n_grids: 200                  # Number of grid points
+  x_left: 0.0                   # Left boundary position
+  x_right: 1.0                  # Right boundary position
+  x_interface: 0.5              # Initial interface position
+  
+  # Time parameters
+  t_max: 0.2                    # Final simulation time
+  cfl: 0.9                      # Courant-Friedrichs-Lewy number
+  n_output: 21                  # Number of output time steps
+  
+  # Initial conditions (left state, right state)
+  # Format: [pressure, density, velocity]
+  left_state: [1.0, 1.0, 0.0]   # High pressure side
+  right_state: [0.1, 0.125, 0.0] # Low pressure side
+
+# CUDA Configuration
+cuda:
+  # Build configuration
+  build_dir: "cuda"
+  executable: "shock_tube"
+  
+  # CUDA-specific parameters
+  arch: "sm_50"                 # CUDA architecture
+  optimization: "-O3"           # Optimization level
+  
+  # Output configuration (matching actual CUDA output)
+  output_prefix: "solution"
+  host_output: "solution_lax_host.dat"
+  device_output_prefix: "solution_lax_device"
+
+# Analytical Configuration
+analytical:
+  # Build configuration
+  build_dir: "analytical"
+  script: "analytical_shock_tube.py"
+  output_file: "results/analytic.dat"
+
+# Visualization Configuration
+visualization:
+  # Build configuration
+  build_dir: "visualize"
+  
+  # Output configuration
+  output_dir: "plots"
+  format: "png"                 # Output format: png, pdf, svg, eps
+  
+  # Plot configuration
+  dpi: 300                      # Plot resolution
+  style: "publication"          # Plot style: publication, default
+  
+  # Colors
+  colors:
+    analytical: "#DC143C"       # Red for analytical
+    numerical: "#1f77b4"        # Blue for numerical
+    error: "#2ca02c"            # Green for error
+  
+  # Plot types to generate
+  plots:
+    - "density_comparison"
+    - "density_error"
+    - "pressure_comparison"
+    - "pressure_error"
+    # evolution/final plots removed
+
+# Output Directories
+output:
+  results_dir: "results"        # Directory for simulation results
+  plots_dir: "plots"            # Directory for generated plots
+  logs_dir: "logs"              # Directory for log files
+
+# Build Configuration
+build:
+  # Compiler settings
+  cxx: "g++"
+  nvcc: "nvcc"
+  
+  # Compiler flags
+  cxx_flags: "-std=c++14 -O3"
+  nvcc_flags: "-std=c++14 -O3"
+  
+  # Include directories
+  include_dirs: []
+  
+  # Library directories
+  lib_dirs: []
+  
+  # Libraries
+  libraries: ["cudart"]
+
+# Logging Configuration
+logging:
+  level: "INFO"                 # Logging level: DEBUG, INFO, WARNING, ERROR
+  file: "logs/simulation.log"   # Log file path
+  console: true                 # Enable console logging
